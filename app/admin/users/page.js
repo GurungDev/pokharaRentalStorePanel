@@ -5,7 +5,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { toast } from "@/components/ui/use-toast";
 import { getAllCustomerList } from "@/services/customer.service";
 
-export default function Customers() {
+ function Customers() {
   const [rows, setRows] = useState([]);
   const [rowId, setRowId] = useState(null);
   const [rowChanged, setChanged] = useState(false);
@@ -159,3 +159,5 @@ export default function Customers() {
     </div>
   );
 }
+
+export default withAuth(Customers)

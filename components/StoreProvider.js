@@ -1,14 +1,17 @@
+"use client";
+import React from "react";
+import { Toaster } from "./ui/toaster";
+import Navbar from "./admin/navbar";
+import { Provider } from "react-redux";
+import { store } from "@/redux/store";
 
-import React from 'react'
-import { Toaster } from './ui/toaster'
-
-const StoreProvider = ({children}) => {
+const StoreProvider = ({ children }) => {
   return (
-   <main>
-     {children}
-    <Toaster />
-   </main>
-  )
-}
+    <Provider store={store}>
+      { children }
+      <Toaster />
+    </Provider>
+  );
+};
 
-export default  StoreProvider;
+export default StoreProvider;

@@ -12,19 +12,21 @@ import { resetLogin } from "../../redux/slices/userSlice";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { useDispatch, useStore } from "react-redux";
  
 const Navbar = () => {
   const links = [
-    { path: "/dashboard", name: "DashBoard", logo: <RiDashboard3Fill/> },
-    { path: "/users", name: "Users", logo: <HiUsers/> },
-    { path: "/stores", name: "Stores", logo: <LiaStoreSolid/> },
-    { path: "/orders", name: "Orders", logo: <MdPayments/> },
+    { path: "/admin/dashboard", name: "DashBoard", logo: <RiDashboard3Fill/> },
+    { path: "/admin/users", name: "Users", logo: <HiUsers/> },
+    { path: "/admin/stores", name: "Stores", logo: <LiaStoreSolid/> },
+    { path: "/admin/orders", name: "Orders", logo: <MdPayments/> },
   ];
   const [isOpen, setIsOpen] = useState(false);
   const { push } = useRouter();
   const pathname = usePathname()
-  // const dispatch = useDispatch();
-  console.log(pathname)
+  const dispatch = useDispatch();
+  const store = useStore();
+
   const toggleDrawer = () => {
     setIsOpen((prevState) => !prevState);
   };
@@ -73,7 +75,7 @@ const Navbar = () => {
                 <button
                   onClick={() => {
                     dispatch(resetLogin());
-                    window.location.reload();
+                    push("/")
                   }}
                   className="hover:border-blue-600 duration-500 hover:text-blue-600 border-[#333] border-b-[2px]  flex w-[45%]  gap-2 items-center justify-center  "
                 >
@@ -110,8 +112,8 @@ const Navbar = () => {
           <div className="absolute bottom-8  w-full">
             <button
               onClick={() => {
-                // dispatch(resetLogin());
-                // window.location.reload();
+                dispatch(resetLogin());
+                push("/")
               }}
               className="hover:border-blue-600 duration-500 hover:text-blue-600 border-[#333] border-b-[2px]  flex w-[35%]  gap-2 items-center justify-center  "
             >

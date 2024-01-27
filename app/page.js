@@ -18,6 +18,11 @@ import { loginUser } from "@/services/auth/login.service"
 import { useRouter } from "next/navigation"
 import { setLoginInfo } from "@/lib/storage.utils"
 import Image from "next/image"
+import { useDispatch } from "react-redux"
+import userSlice, { setLogin } from "@/redux/slices/userSlice"
+import { Switch } from "@/components/ui/switch"
+import { useEffect, useState } from "react"
+import { store } from "@/redux/store"
  
 
 const formSchema = z.object({
@@ -35,6 +40,14 @@ const formSchema = z.object({
 export default function Home() {
   const { toast } = useToast()
   const { push } = useRouter();
+  const [rememberMe, setRememberMe] = useState(false);
+  const dispatch = useDispatch();
+  const state = store.getState();
+  useEffect(()=> {
+      if(state.account.loginStatus == true && state.account.token != null){
+        push("/admin/dashboard");
+      }
+  }, [])
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,9 +63,9 @@ export default function Home() {
        if(!res){
         throw new Error(400, "Something went wrong")
       }
-    
-      setLoginInfo({token: res?.data?.token})
-      push("/dashboard")
+      dispatch(setLogin({token: res?.data?.token, isRememberMe: rememberMe}))
+     
+      push("/admin/dashboard")
       toast({
         title: "Login sucess"})
 
@@ -103,6 +116,10 @@ export default function Home() {
             </FormItem>
           )}
         /> 
+        <div className="flex gap-5">
+        <Switch onClick = {()=> setRememberMe(!rememberMe)}/>
+          Remember me 
+        </div>
         <Button type="submit" className='btn'>Login</Button>
       </form>
     </Form>

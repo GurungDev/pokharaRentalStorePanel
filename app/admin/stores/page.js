@@ -4,8 +4,9 @@ import { Box, Button, Switch } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { approveStore, getAllStoreList } from "@/services/store.service";
 import { toast } from "@/components/ui/use-toast";
+ 
 
-export default function Stores() {
+function Stores() {
   const [rows, setRows] = useState([]);
   const [rowId, setRowId] = useState(null);
   const [rowChanged, setChanged] = useState(false);
@@ -205,3 +206,6 @@ export default function Stores() {
     </div>
   );
 }
+
+
+export default withAuth(Stores)

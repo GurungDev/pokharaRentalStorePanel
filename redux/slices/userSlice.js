@@ -4,11 +4,11 @@ import { createSlice } from "@reduxjs/toolkit";
  
 
 const initialState = {
-  loginStatus: false,
-  token:""
+  token: getToken() || "",
+  loginStatus: isUserLogin() || false,
 };
 
-export const userSlice = createSlice({
+export const accountSlice  = createSlice({
   name: "user",
   initialState,
   reducers: {
@@ -19,13 +19,13 @@ export const userSlice = createSlice({
     },
  
 
-    resetLogin: (state, action) => {
+    resetLogin: (state) => {
       state.loginStatus = false;
       state.token = "";
-    resetlogin();
+      resetlogin();
     },
   },
 });
 
-export const { setLogin, resetLogin } = userSlice.actions;
-export default userSlice.reducer;
+export const { setLogin, resetLogin } = accountSlice.actions;
+export default accountSlice.reducer;

@@ -1,18 +1,18 @@
 "use client"
-import { Toast } from "@/components/ui/toast";
-import { toast } from "@/components/ui/use-toast";
+import withAuth from "@/components/authMiddleware";
+ import { toast } from "@/components/ui/use-toast";
 import { getCustomerCount } from "@/services/customer.service";
 import { getStoreCount } from "@/services/store.service";
 import React, { useEffect, useState } from "react";
-import { FaClipboardList } from "react-icons/fa6";
 import { HiUsers } from "react-icons/hi2";
 import { LiaStoreSolid } from "react-icons/lia";
  
+ 
 
-export default function Dashoard() {
+ function Dashoard() {
   const [customerCount, setCustomerCount] = useState(0)
   const [storeCount, setStoreCount] = useState(0)
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -21,16 +21,14 @@ export default function Dashoard() {
         setCustomerCount(customerCountResult.data);
         setStoreCount(storeCountResult.data);
       } catch (error) {
-        Toast({
+        toast({
           variant: "destructive",
           title: "Something went wrong",
           description: "Couldn't connect to the server",
         });
       }
     };
-
     fetchData();  
-
   }, []); 
   return (
     <div className="">
@@ -73,7 +71,4 @@ export default function Dashoard() {
   );
 }
 
- 
- 
-
- 
+export default withAuth(Dashoard);

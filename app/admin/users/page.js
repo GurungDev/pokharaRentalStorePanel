@@ -4,6 +4,7 @@ import { Box, Button, Switch } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { toast } from "@/components/ui/use-toast";
 import { getAllCustomerList } from "@/services/customer.service";
+import withAuth from "@/components/authMiddleware";
 
  function Customers() {
   const [rows, setRows] = useState([]);

@@ -4,6 +4,7 @@ import { Box, Button, Switch } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { approveStore, getAllStoreList } from "@/services/store.service";
 import { toast } from "@/components/ui/use-toast";
+import withAuth from "@/components/authMiddleware";
  
 
 function Stores() {

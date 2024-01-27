@@ -17,6 +17,8 @@ const withAuth = (WrappedComponent) => {
             description: "You are not authorized to access this page. Please login!!"})
         }
       }
+
+
       return React.createElement(WrappedComponent, props);
     }
  

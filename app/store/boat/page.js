@@ -6,8 +6,8 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { toast } from "@/components/ui/use-toast";
 import withAuth from "@/components/authMiddleware";
 import { getAllBoatList } from "@/services/boat.service";
-import Admin_Card from "@/components/admin/card";
-import { DialogBox } from "@/components/admin/diaglog";
+import Admin_Card from "@/components/admin/card.boat";
+import { DialogBox } from "@/components/admin/diaglog.boat";
  
 
 function Boats() {

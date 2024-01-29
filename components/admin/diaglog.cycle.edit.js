@@ -24,7 +24,7 @@ import {
 } from "../ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createABoat } from "@/services/boat.service";
+import { createAcycle, updateAcycle } from "@/services/cycle.service";
 
 const formSchema = z.object({
   title: z.string({ message: "must be string" }).min(5, {
@@ -34,54 +34,48 @@ const formSchema = z.object({
   description: z.string({ message: "must be string" }).min(5, {
     message: " must be at least 5 characters.",
   }),
-  priceInRs: z.string().refine((value) => {
-    const numericValue = parseFloat(value);
-    if (!isNaN(numericValue) && isFinite(numericValue)) {
-      return numericValue;
-    }
-    return false;
-  }, { message: "Invalid number format" }),
-
-  capacity: z.string().refine((value) => {
-    const numericValue = parseFloat(value);
-    if (!isNaN(numericValue) && isFinite(numericValue)) {
-      return numericValue;
-    }
-    return false;
-  }, { message: "Invalid number format" }),
+  priceInRs: z.string().refine(
+    (value) => {
+      const numericValue = parseFloat(value);
+      if (!isNaN(numericValue) && isFinite(numericValue)) {
+        return numericValue;
+      }
+      return false;
+    },
+    { message: "Invalid number format" }
+  ),
 });
 
-export function DialogBox() {
+export function CyclePatchDialogBox(props) {
   const { toast } = useToast();
-  const [open, setOpen] = useState(false);
+  console.log(props);
   useEffect(() => {}, []);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      priceInRs: '',
-      capacity: '',
+      title: props.title,
+      description: props.description,
+      priceInRs: props.priceInRs,
     },
   });
 
   async function onSubmit(values) {
     try {
-      const res = await createABoat({
+      const res = await updateAcycle(props.id, {
         title: values.title,
         description: values.description,
         priceInRs: values.priceInRs,
-        capacity: values.capacity,
       });
-
+      console.log(res);
       if (!res) {
         throw new Error(400, "Something went wrong");
       }
 
       toast({
-        title: "Sucessfully added a boat",
+        title: "Sucessfully updated the cycle",
       });
-      form.reset()
+
+      form.reset();
     } catch (error) {
       toast({
         variant: "destructive",
@@ -91,18 +85,18 @@ export function DialogBox() {
     }
   }
   return (
-    <Dialog  >
-      <DialogTrigger  asChild>
-        <Button className="shadow-md btn float-right bg-blue-600 text-[.9rem] text-white rounded py-2 px-5">
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="px-6 py-1 bg-blue-600 rounded text-white ease-in-out duration-[.5s] hover:bg-red-600  shadow mt-2">
           {" "}
-          Add a boat
+          Edit
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] md:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Boat listing</DialogTitle>
+          <DialogTitle>Cycle listing</DialogTitle>
           <DialogDescription>
-            Fill all the details to list a new boat.
+            Fill all the details to list a new cycle.
           </DialogDescription>
         </DialogHeader>
 
@@ -118,7 +112,7 @@ export function DialogBox() {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="title" {...field} />
+                    <Input placeholder={props?.title} {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -131,9 +125,13 @@ export function DialogBox() {
               name="priceInRs"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price of the boat for an hour</FormLabel>
+                  <FormLabel>Price of the cycle for an hour</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="priceInRs" {...field} />
+                    <Input
+                      type="number"
+                      placeholder={props?.priceInRs}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -145,23 +143,9 @@ export function DialogBox() {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description of the boat</FormLabel>
+                  <FormLabel>Description of the cycle</FormLabel>
                   <FormControl>
-                    <Input  placeholder="description" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="capacity"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Capacity of the boat</FormLabel>
-                  <FormControl>
-                    <Input type="number" placeholder="capacity" {...field} />
+                    <Input placeholder={props?.description} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -169,15 +153,11 @@ export function DialogBox() {
             />
 
             <DialogFooter className={"col-span-2"}>
-                <DialogClose asChild>
-                    <Button type="button" onClick={()=> window.location.reload()} className="btn bg-secondary w-[50%]">
-                    Close
-                    </Button>
-                </DialogClose>
-
-              <Button type="submit" className="btn w-[50%]">
-                Login
-              </Button>
+              <DialogClose asChild>
+                <Button type="submit" className="btn w-[50%]">
+                  Create
+                </Button>
+              </DialogClose>
             </DialogFooter>
           </form>
         </Form>

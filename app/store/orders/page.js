@@ -5,6 +5,7 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { approveStore, getAllStoreList } from "@/services/store.service";
 import { toast } from "@/components/ui/use-toast";
 import withAuth from "@/components/authMiddleware";
+import { getAllBoatList } from "@/services/boat.service";
 
  function Orders() {
   const [rows, setRows] = useState([]);
@@ -13,7 +14,7 @@ import withAuth from "@/components/authMiddleware";
   useEffect(() => {
     async function getRows() {
       try {
-        let row = await getAllStoreList();
+        let row = await getAllBoatList();
         const updatedRow = row.data.map((e, index) => {
           return { ...e, id: e.id };
         });

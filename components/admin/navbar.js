@@ -4,22 +4,24 @@ import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
 import { FaBars } from "react-icons/fa6";
 import { RiDashboard3Fill } from "react-icons/ri";
-import { HiUsers } from "react-icons/hi2";
 import { MdPayments } from "react-icons/md";
-import { LiaStoreSolid } from "react-icons/lia";
 import { CiLogout } from "react-icons/ci";
 import { resetLogin } from "../../redux/slices/userSlice";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useDispatch, useStore } from "react-redux";
+import { FaSailboat } from "react-icons/fa6";
+import { IoBicycleSharp } from "react-icons/io5";
+
+
  
 const Navbar = () => {
   const links = [
-    { path: "/admin/dashboard", name: "DashBoard", logo: <RiDashboard3Fill/> },
-    { path: "/admin/users", name: "Users", logo: <HiUsers/> },
-    { path: "/admin/stores", name: "Stores", logo: <LiaStoreSolid/> },
-    { path: "/admin/orders", name: "Orders", logo: <MdPayments/> },
+    { path: "/store/dashboard", name: "DashBoard", logo: <RiDashboard3Fill/> },
+    { path: "/store/cycle", name: "Cycles", logo: <IoBicycleSharp/> },
+    { path: "/store/boat", name: "Boats", logo: <FaSailboat /> },
+    { path: "/store/orders", name: "Orders", logo: <MdPayments/> },
   ];
   const [isOpen, setIsOpen] = useState(false);
   const { push } = useRouter();

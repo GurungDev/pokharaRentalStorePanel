@@ -16,13 +16,14 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import { loginUser } from "@/services/auth/login.service"
 import { useRouter } from "next/navigation"
-import { setLoginInfo } from "@/lib/storage.utils"
+ 
 import Image from "next/image"
 import { useDispatch } from "react-redux"
-import userSlice, { setLogin } from "@/redux/slices/userSlice"
+import   { setLogin } from "@/redux/slices/userSlice"
 import { Switch } from "@/components/ui/switch"
 import { useEffect, useState } from "react"
 import { store } from "@/redux/store"
+import Link from "next/link"
  
 
 const formSchema = z.object({
@@ -45,7 +46,7 @@ export default function Home() {
   const state = store.getState();
   useEffect(()=> {
       if(state.account.loginStatus == true && state.account.token != null){
-        push("/admin/dashboard");
+        push("/store/dashboard");
       }
   }, [])
   const form = useForm({
@@ -58,14 +59,14 @@ export default function Home() {
 
   async function onSubmit(values) {
     try {
-       const res = await loginUser({"email": values.email, "password": values.password,  "validateFor": "admin"});
+       const res = await loginUser({"email": values.email, "password": values.password,  "validateFor": "store"});
       
        if(!res){
         throw new Error(400, "Something went wrong")
       }
       dispatch(setLogin({token: res?.data?.token, isRememberMe: rememberMe}))
      
-      push("/admin/dashboard")
+      push("/store/dashboard")
       toast({
         title: "Login sucess"})
 
@@ -86,7 +87,7 @@ export default function Home() {
       <form  className="grid gap-7 bg-neutral-100 my-5 py-10 px-20 shadow-md" onSubmit={form.handleSubmit(onSubmit)}>
       <div className="text-center">
       <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Pokhara Rental</h1>
-      <small className="">Login into the admin panel</small>
+      <small className="">Login into the staff panel</small>
       </div>
         <FormField
           control={form.control}
@@ -115,10 +116,16 @@ export default function Home() {
               <FormMessage />
             </FormItem>
           )}
-        /> 
-        <div className="flex gap-5">
-        <Switch onClick = {()=> setRememberMe(!rememberMe)}/>
-          Remember me 
+        />  
+        <div className="flex  justify-between items-center">
+          <div className="flex gap-2 items-center">
+          <Switch  onClick = {()=> setRememberMe(!rememberMe)}/>
+          <small>  Remember me </small>
+
+          </div>
+          <Link href="/register"  className="text-primary">
+            <small>Register now?</small>
+          </Link>
         </div>
         <Button type="submit" className='btn'>Login</Button>
       </form>

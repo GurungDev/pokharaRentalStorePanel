@@ -1,8 +1,9 @@
 "use client"
 import withAuth from "@/components/authMiddleware";
  import { toast } from "@/components/ui/use-toast";
-import { getCustomerCount } from "@/services/customer.service";
-import { getStoreCount } from "@/services/store.service";
+import { getBoatCount } from "@/services/boat.service";
+import { getcycleCount } from "@/services/cycle.service";
+ 
 import React, { useEffect, useState } from "react";
 import { HiUsers } from "react-icons/hi2";
 import { LiaStoreSolid } from "react-icons/lia";
@@ -10,16 +11,16 @@ import { LiaStoreSolid } from "react-icons/lia";
  
 
  function Dashoard() {
-  const [customerCount, setCustomerCount] = useState(0)
-  const [storeCount, setStoreCount] = useState(0)
+  const [boatCount, setboatCount] = useState(0)
+  const [cycleCount, setcycleCount] = useState(0)
  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const customerCountResult = await getCustomerCount();
-        const storeCountResult = await getStoreCount();
-        setCustomerCount(customerCountResult.data);
-        setStoreCount(storeCountResult.data);
+        const boatCountResult = await getBoatCount();
+        const cycleCountResult = await getcycleCount();
+        setboatCount(boatCountResult.data);
+        setcycleCount(cycleCountResult.data);
       } catch (error) {
         toast({
           variant: "destructive",
@@ -40,9 +41,9 @@ import { LiaStoreSolid } from "react-icons/lia";
                 </div>
               
                 <div className=" items-center flex  justify-between">
-                  <p className="secondary-title ">Customers </p>{" "}
+                  <p className="secondary-title ">Boats </p>{" "}
                   <div className="h-[1px] w-[20px] bg-white"></div>
-                  <p className="  text-[1.5rem]"> {customerCount}</p>
+                  <p className="  text-[1.5rem]"> {boatCount}</p>
                 </div>
               </div>
             </div>
@@ -55,9 +56,9 @@ import { LiaStoreSolid } from "react-icons/lia";
                 </div>
                
                 <div className=" items-center flex justify-between">
-                  <p className="text-[1.5rem]  ">Stores </p>{" "}
+                  <p className="text-[1.5rem]  ">Cycles </p>{" "}
                   <div className="h-[1px] w-[20px] bg-white"></div>
-                  <p className="  text-[1.5rem]"> {storeCount}</p>
+                  <p className="  text-[1.5rem]"> {cycleCount}</p>
                 </div>
               </div>
             </div>

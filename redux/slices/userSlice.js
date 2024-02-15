@@ -5,7 +5,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   token: getToken() || "",
-  loginStatus: isUserLogin() || false,
+  loginStatus: isUserLogin() || false
 };
 
 export const accountSlice  = createSlice({
@@ -17,8 +17,6 @@ export const accountSlice  = createSlice({
       state.token = action.payload?.token;
       setLoginInfo({ ...action.payload });
     },
- 
-
     resetLogin: (state) => {
       state.loginStatus = false;
       state.token = "";

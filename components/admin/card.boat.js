@@ -1,5 +1,6 @@
 import { deleteABoat } from "@/services/boat.service";
 import { toast } from "../ui/use-toast";
+import Link from "next/link";
 
  
 
@@ -49,12 +50,14 @@ const Admin_Card = (props) => {
               >
                 Delete
               </button>
-              <button
-                
+
+ 
+              <Link
+                href={`/store/boat/${props.id}`}
                 className="px-6 py-1 bg-blue-600 rounded text-white ease-in-out duration-[.5s] hover:bg-red-600  shadow mt-2"
               >
                 Edit
-              </button>
+              </Link>
 
             </div>
           </div>

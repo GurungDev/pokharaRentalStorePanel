@@ -1,71 +1,85 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Box, Button, Switch } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { approveStore, getAllStoreList } from "@/services/store.service";
-import { toast } from "@/components/ui/use-toast";
 import withAuth from "@/components/authMiddleware";
-import { getAllBoatList } from "@/services/boat.service";
+import { toast } from "@/components/ui/use-toast";
+import { getAllOrders } from "@/services/order.service";
+import { approveStore } from "@/services/store.service";
+import { Box, Switch } from "@mui/material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { useEffect, useState } from "react";
 
- function Orders() {
+function Orders() {
   const [rows, setRows] = useState([]);
   const [rowId, setRowId] = useState(null);
   const [rowChanged, setChanged] = useState(false);
-  useEffect(() => {
-    async function getRows() {
-      try {
-        let row = await getAllBoatList();
-        const updatedRow = row.data.map((e, index) => {
-          return { ...e, id: e.id };
-        });
-        setRows(updatedRow);
-      } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Something went wrong",
-          description: error.response?.data?.message || "Couldn't connect to the server",
-        });
-      }
+  async function getRows() {
+    try {
+      let row = await getAllOrders({});
+
+      const updatedRow = row.data.map((e, index) => {
+        const bookingDate = e?.bookingDate;
+        const dateObj = new Date(bookingDate);
+        const formattedDate = dateObj.toISOString().split("T")[0];
+       
+
+        return { ...e, id: e.id, title: e?.boat?.title || e?.cycle?.title, bookingDate: formattedDate };
+      });
+      setRows(updatedRow);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: error?.data?.message || "Couldn't connect to the server",
+      });
     }
+  }
+
+  useEffect(() => {
     getRows();
   }, [rowChanged]);
 
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5, maxWidth: 90 },
     {
-      field: "name",
-      headerName: "Name",
+      field: "quantity",
+      headerName: "Quantity",
       flex: 1,
       minWidth: 150,
       maxWidth: 250,
     },
     {
-      field: "email",
-      headerName: "Email",
+      field: "totalPriceInRs",
+      headerName: "Total Amount",
       flex: 1,
       minWidth: 150,
       maxWidth: 250,
     },
-
     {
-      field: "location",
-      headerName: "location",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 250,
-    },
-
-    {
-      field: "ownerName",
-      headerName: "ownerName",
+      field: "title",
+      headerName: "Listing Name",
       flex: 1,
       minWidth: 150,
       maxWidth: 250,
     },
 
     {
-      field: "phoneNumber",
-      headerName: "Contact No",
+      field: "priceOfSingleProduct",
+      headerName: "Unit Price",
+      flex: 1,
+      minWidth: 150,
+      maxWidth: 250,
+    },
+
+    {
+      field: "bookingDate",
+      headerName: "Booking Date",
+      flex: 1,
+      minWidth: 150,
+      maxWidth: 250,
+    },
+
+    {
+      field: "durationInHour",
+      headerName: "Duration",
       type: "number",
       flex: 1,
       headerAlign: "left",
@@ -73,39 +87,39 @@ import { getAllBoatList } from "@/services/boat.service";
       minWidth: 150,
       maxWidth: 200,
     },
-    {
-      field: "is_approved",
-      headerName: "Is Approved",
-      type: "actions",
-      minWidth: 150,
-      maxWidth: 200,
-      flex: 1,
-      renderCell: (params) => {
-        const data = params.row.id;
-        const update = async () => {
-          console.log(params);
-          try {
-            const store = await approveStore(data);
-            setChanged(!rowChanged);
-            toast({
-              title: "Successfully updated",
-            });
-          } catch (error) {
-            toast({
-              variant: "destructive",
-              title: "Failed",
-            });
-          }
-        };
-        return (
-          <Switch
-            checked={params.row.is_approved}
-            onChange={() => update()}
-            inputProps={{ "aria-label": "controlled" }}
-          />
-        );
-      },
-    },
+    // {
+    //   field: "is_approved",
+    //   headerName: "Is Approved",
+    //   type: "actions",
+    //   minWidth: 150,
+    //   maxWidth: 200,
+    //   flex: 1,
+    //   renderCell: (params) => {
+    //     const data = params.row.id;
+    //     const update = async () => {
+    //       console.log(params);
+    //       try {
+    //         const store = await approveStore(data);
+    //         setChanged(!rowChanged);
+    //         toast({
+    //           title: "Successfully updated",
+    //         });
+    //       } catch (error) {
+    //         toast({
+    //           variant: "destructive",
+    //           title: "Failed",
+    //         });
+    //       }
+    //     };
+    //     return (
+    //       <Switch
+    //         checked={params.row.is_approved}
+    //         onChange={() => update()}
+    //         inputProps={{ "aria-label": "controlled" }}
+    //       />
+    //     );
+    //   },
+    // },
 
     // {
     //     field: "actions",
@@ -142,12 +156,12 @@ import { getAllBoatList } from "@/services/boat.service";
   ];
 
   return (
-    <div className="">
+    <div className="pt-10">
       <div className="layout">
         <div className="m-0 m-auto border-b-2">
-          <h1 className="text-[1.5rem] text-neutral-800">Store Details</h1>
+          <h1 className="text-[1.5rem] text-neutral-800">Order Details</h1>
           <h2 className="text-[.8rem] pb-6 text-neutral-600">
-            List of all the stores
+            List of all the Orders
           </h2>
         </div>
         <div className="m-initial">
@@ -207,6 +221,5 @@ import { getAllBoatList } from "@/services/boat.service";
     </div>
   );
 }
-
 
 export default withAuth(Orders);

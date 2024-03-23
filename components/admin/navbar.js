@@ -13,6 +13,7 @@ import Image from "next/image";
 import { useDispatch, useStore } from "react-redux";
 import { FaSailboat } from "react-icons/fa6";
 import { IoBicycleSharp } from "react-icons/io5";
+import { RiUserFollowFill } from "react-icons/ri";
 
 
  
@@ -22,6 +23,7 @@ const Navbar = () => {
     { path: "/store/cycle", name: "Cycles", logo: <IoBicycleSharp/> },
     { path: "/store/boat", name: "Boats", logo: <FaSailboat /> },
     { path: "/store/orders", name: "Orders", logo: <MdPayments/> },
+    { path: "/store/subscriber", name: "Subscriber", logo: <RiUserFollowFill/> },
   ];
   const [isOpen, setIsOpen] = useState(false);
   const { push } = useRouter();

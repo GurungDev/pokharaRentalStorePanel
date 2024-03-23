@@ -16,8 +16,9 @@ export const deleteABoat = async (data)=> {
 }
 
 
-export const updateABoat = async (data)=> {
-    const res = await http.patch(`store/boat/${data}`)
+export const updateABoat = async (id, data)=> {
+    console.log("first")
+    const res = await http.patch(`store/boat/${id}`, {data})
     return res?.data;
 }
 

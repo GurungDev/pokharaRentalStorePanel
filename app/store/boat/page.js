@@ -53,7 +53,7 @@ function Boats() {
               <Admin_Card
                 key={index}
                 details={e.description}
-                image={e.image}
+                image={e.thumbnail}
                 name={e.title}
                 id={e.id}
               />

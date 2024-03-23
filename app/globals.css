@@ -99,6 +99,19 @@
 
 }
 
+.scroll-hidden {
+  /* Hide scrollbar for Firefox */
+  scrollbar-width: none;
+  /* Hide scrollbar for Webkit */
+  -ms-overflow-style: none;
+}
+
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+
+
 @layer utilities {
   .layout {
     @apply w-[90%] md:w-[80%] m-auto;

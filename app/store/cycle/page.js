@@ -52,7 +52,8 @@ function Cycle() {
               <Admin_Card_Cycle
                 key={index}
                 details={e.description}
-                image={e.image}
+                image={e.thumbnail}
+                secondaryImage={e?.secondaryImage}
                 name={e.title}
                 price={e.priceInRs}
                 id={e.id}

@@ -54,7 +54,7 @@ const Admin_Card = (props) => {
  
               <Link
                 href={`/store/boat/${props.id}`}
-                className="px-6 py-1 bg-blue-600 rounded text-white ease-in-out duration-[.5s] hover:bg-red-600  shadow mt-2"
+                className="px-6 py-1 bg-blue-600 text-center rounded text-white ease-in-out duration-[.5s] hover:bg-red-600  shadow mt-2"
               >
                 Edit
               </Link>

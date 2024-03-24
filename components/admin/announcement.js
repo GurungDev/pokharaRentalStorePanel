@@ -11,8 +11,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useToast } from "../ui/use-toast";
+import { createABoat } from "@/services/boat.service";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
   Form,
@@ -22,9 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createABoat } from "@/services/boat.service";
+import { useToast } from "../ui/use-toast";
 
 const formSchema = z.object({
   title: z.string({ message: "must be string" }).min(5, {
@@ -121,18 +121,10 @@ export function DialogBox() {
                   <FormControl>
                     <Input placeholder="title" className="w-full "   {...field} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
-
- 
-
- 
-
-      
-
             <DialogFooter className={"col-span-2"}>
                 <DialogClose asChild>
                     <Button type="button" onClick={()=> window.location.reload()} className="btn bg-secondary w-[50%]">

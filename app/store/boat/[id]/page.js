@@ -11,7 +11,6 @@ const BoatUpdatepage = () => {
   async function getData (){
     const response = await getOneBoat(id);  
     setBoatData(response?.data)
-   
 }
 
   useEffect(() => {

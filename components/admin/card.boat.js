@@ -7,7 +7,7 @@ import Link from "next/link";
 const Admin_Card = (props) => {
   const img = props.image;
   return (
-    <div className="relative  m-0 mx-auto w-full h-[35vh] overflow-hidden rounded-md">
+    <div className="relative group m-0 mx-auto w-full h-[35vh] overflow-hidden rounded-md">
       <div
         className="card relative w-full h-full hover:scale-110 duration-300"
         style={{
@@ -17,7 +17,7 @@ const Admin_Card = (props) => {
           backgroundSize: "cover",
         }}
       >
-        <div className="  m-0 mx-auto title w-[90%] text-[1.2rem] text-center pt-40 text-[1.5rem] text-white">
+        <div className="  m-0 mx-auto group-hover:hidden w-[90%] text-[1.2rem] text-center pt-40 text-[1.5rem] text-white">
           <h1>{props.name}</h1>
         </div>
         <div className="details absolute bottom-[-110%] duration-300 ease left-0 leading-2   bg-black bg-opacity-70 w-full text-neutral-300">

@@ -116,6 +116,7 @@ export function CycleDialogBox() {
       setsecondaryImage(null);
       setsecondaryImageFormData(null);
     } catch (error) {
+      console.log(error.message);
       toast({
         variant: "destructive",
         title: "Failed listing",

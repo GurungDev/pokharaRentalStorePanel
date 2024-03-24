@@ -6,7 +6,7 @@ export const getAllBoatList = async ()=> {
 }
 
 export const createABoat = async (data)=> {
-    const res = await http.post("/store/boat/", data) 
+    const res = await http.post("/store/boat/", data, {timeout: 10000}) 
     return res?.data;
 }
 
@@ -17,8 +17,8 @@ export const deleteABoat = async (data)=> {
 
 
 export const updateABoat = async (id, data)=> {
-    console.log("first")
-    const res = await http.patch(`store/boat/${id}`, {data})
+ 
+    const res = await http.patch(`store/boat/${id}`, data, {timeout: 10000})
     return res?.data;
 }
 

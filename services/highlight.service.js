@@ -10,12 +10,9 @@ export const createAHighlight = async (data)=> {
     return res?.data;
 }
 
-export const updateAHighlight = async (id, data)=> {
-    const res = await http.patch(`/highlight/${id}`, data)
-    return res?.data;
-}
+ 
 
 export const deleteAHighlight = async (data)=> {
-    const res = await http.delete(`/highlight/${data}`)
+    const res = await http.delete(`/store/highlight/`, {data})
     return res?.data;
 }

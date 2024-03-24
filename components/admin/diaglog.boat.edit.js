@@ -1,18 +1,20 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useToast } from "../ui/use-toast";
-import { useEffect, useState } from "react";
+import { listing } from "@/lib/enum";
+import { updateABoat } from "@/services/boat.service";
+import {
+  createAHighlight,
+  getAllHighlightList,
+} from "@/services/highlight.service";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TextField } from "@mui/material";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { IoMdArrowBack } from "react-icons/io";
 import { z } from "zod";
 import {
   Form,
@@ -22,17 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createAcycle, updateAcycle } from "@/services/cycle.service";
-import { updateABoat } from "@/services/boat.service";
-import Link from "next/link";
-import { IoMdArrowBack } from "react-icons/io";
-import {
-  createAHighlight,
-  getAllHighlightList,
-} from "@/services/highlight.service";
-import { listing } from "@/lib/enum";
+import { useToast } from "../ui/use-toast";
 import HIghLightCard from "./highlightCardComponent";
 
 const formSchema = z.object({
@@ -47,31 +39,9 @@ const formSchema = z.object({
       message: " must be at least 5 characters.",
     })
   ),
-  priceInRs: z.optional(
-    z.string().refine(
-      (value) => {
-        const numericValue = parseFloat(value);
-        if (!isNaN(numericValue) && isFinite(numericValue)) {
-          return numericValue;
-        }
-        return false;
-      },
-      { message: "Invalid number format" }
-    )
-  ),
+  priceInRs: z.number({ message: "Invalid number format" }),
 
-  capacity: z.optional(
-    z.string().refine(
-      (value) => {
-        const numericValue = parseFloat(value);
-        if (!isNaN(numericValue) && isFinite(numericValue)) {
-          return numericValue;
-        }
-        return false;
-      },
-      { message: "Invalid number format" }
-    )
-  ),
+  capacity: z.number({ message: "Invalid number format" }),
 });
 
 const IssueFormSchema = z.object({
@@ -82,15 +52,45 @@ const IssueFormSchema = z.object({
 
 export function BoatUpdateComponent(props) {
   const { toast } = useToast();
-
+  let count = 0;
+  const { id } = useParams();
   const [highlightList, setHighlightList] = useState(null);
+
+  const [thumbnail, setThumbnail] = useState(
+    props?.thumbnail != "null" ? props?.thumbnail : null
+  );
+  const [secondaryImage, setsecondaryImage] = useState(
+    props?.secondaryImage != "null" ? props?.secondaryImage : null
+  );
+  const [thumbnailFormData, setThumbnailFormData] = useState(null);
+  const [secondaryImageFormData, setsecondaryImageFormData] = useState(null);
+
+  const fileInputRef = useRef();
+  const fileInputRef2 = useRef();
   const [updated, setUpdated] = useState(true);
   async function getHighlights() {
-    const highlightList = await getAllHighlightList({
-      data: { highlightFor: listing.BOAT, issueId: props?.id },
+    let highlightList;
+    highlightList = await getAllHighlightList({
+      data: { issueId: id, highlightFor: listing.BOAT },
     });
     setHighlightList(highlightList?.data);
   }
+  const handleThumbnailChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setThumbnailFormData(file);
+      setThumbnail(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSecondaryImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setsecondaryImageFormData(file);
+      setsecondaryImage(URL.createObjectURL(file));
+    }
+  };
+
   useEffect(() => {
     try {
       getHighlights();
@@ -118,7 +118,6 @@ export function BoatUpdateComponent(props) {
 
   async function onHighLightSubmit(values) {
     try {
-      console.log(values);
       const res = await createAHighlight({
         ...values,
         highlightFor: listing.BOAT,
@@ -128,10 +127,11 @@ export function BoatUpdateComponent(props) {
       if (!res) {
         throw new Error(400, "Something went wrong");
       }
-
+      setUpdated(!updated);
       toast({
         title: "Sucessfully added highlight",
       });
+      issueForm.reset();
     } catch (error) {
       toast({
         variant: "destructive",
@@ -143,8 +143,20 @@ export function BoatUpdateComponent(props) {
 
   async function onSubmit(values) {
     try {
-      const res = await updateABoat(props.id, values);
-      console.log("sdhsdgsdi", values);
+      // Create a new FormData object to hold all form data
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("description", values.description);
+      formData.append("priceInRs", values.priceInRs);
+      formData.append("capacity", values.capacity);
+      if(thumbnailFormData){
+        formData.append("thumbnail", thumbnailFormData);
+      }
+      if(secondaryImageFormData){
+        formData.append("secondaryImage", secondaryImageFormData);
+      }
+      const res = await updateABoat(props.id, formData);
+
       if (!res) {
         throw new Error(400, "Something went wrong");
       }
@@ -184,38 +196,50 @@ export function BoatUpdateComponent(props) {
             onSubmit={form.handleSubmit(onSubmit)}
             className="grid gap-5 grid-cols-2"
           >
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input defaultValue={props?.title} {...field} />
-                  </FormControl>
+            <div>
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input value={props?.title} {...field} />
+                    </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="priceInRs"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Price of the boat for an hour</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      defaultValue={props?.priceInRs}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="priceInRs"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price of the boat for an hour</FormLabel>
+                    <FormControl>
+                      <Input value={props?.priceInRs.toString()} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="capacity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Capacity of the boat</FormLabel>
+                    <FormControl>
+                      <Input value={String(props?.capacity)} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
@@ -224,23 +248,12 @@ export function BoatUpdateComponent(props) {
                 <FormItem>
                   <FormLabel>Description of the boat</FormLabel>
                   <FormControl>
-                    <Input defaultValue={props?.description} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="capacity"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Capacity of the boat</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      defaultValue={props?.capacity}
+                    <TextField
+                      rows={7}
+                      multiline
+                      draggable={true}
+                      fullWidth={true}
+                      value={props?.description}
                       {...field}
                     />
                   </FormControl>
@@ -248,6 +261,68 @@ export function BoatUpdateComponent(props) {
                 </FormItem>
               )}
             />
+            <div>
+              <label className="block">
+                <span className="sr-only">thumbnail of the boat</span>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  className="hidden"
+                  onChange={handleThumbnailChange}
+                />
+                <button
+                  type="button"
+                  className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+                  onClick={() => fileInputRef.current.click()}
+                >
+                  Upload thumbnail
+                </button>
+              </label>
+              <div className=" border-[2px] my-4 w-full h-[200px] overflow-scroll">
+                {/* ... */}
+                {thumbnail && (
+                  <Image
+                    src={thumbnail}
+                    alt="Description of the image"
+                    width={500}
+                    height={300}
+                    className={"object-cover"}
+                  />
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label className="block">
+                <span className="sr-only">Secondary of the boat</span>
+                <input
+                  ref={fileInputRef2}
+                  type="file"
+                  className="hidden"
+                  onChange={handleSecondaryImageChange}
+                />
+                <button
+                  type="button"
+                  className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+                  onClick={() => fileInputRef2.current.click()}
+                >
+                  Upload Secondary Image
+                </button>
+              </label>
+              <div className=" border-[2px] my-4 w-full h-[200px] overflow-scroll">
+                {/* ... */}
+                {secondaryImage && (
+                  <Image
+                    src={secondaryImage}
+                    alt="Description of the image"
+                    width={500}
+                    height={300}
+                    className={" "}
+                  />
+                )}
+              </div>
+            </div>
+
             <Button type="submit" className="btn w-[50%]">
               Update{" "}
             </Button>
@@ -280,7 +355,19 @@ export function BoatUpdateComponent(props) {
         </Form>
 
         <div>
-          <HIghLightCard description={"this is a test "} no={1} id={1} />
+          {highlightList?.map((e, index) => {
+            return (
+              <HIghLightCard
+                key={index}
+                description={e.description}
+                no={++count}
+                id={e.id}
+                issueId={e?.issueId}
+                setUpdated={() => setUpdated(!updated)}
+                listingFor={listing.BOAT}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

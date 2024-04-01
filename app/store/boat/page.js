@@ -32,9 +32,9 @@ function Boats() {
  
 
   return (
-    <div className=" pt-10">
+    <div className=" ">
       <div className="layout">
-        <div className="m-0 m-auto border-b-2 flex justify-between items-center">
+        <div className="m-0 sticky top-[0vh] z-[10] bg-white pt-5 m-auto border-b-2 flex justify-between items-center">
           <div>
             <h1 className="text-[1.5rem] text-neutral-800">Boats Details</h1>
             <h2 className="text-[.8rem] pb-6 text-neutral-600">
@@ -47,8 +47,19 @@ function Boats() {
           </div>
         </div>
 
-        <div className=" mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-5 overflow-y-auto h-[70vh]">
+        <div className=" mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-5 ">
           {listing.map((e, index) => {
+            return (
+              <Admin_Card
+                key={index}
+                details={e.description}
+                image={e.thumbnail}
+                name={e.title}
+                id={e.id}
+              />
+            );
+          })}
+           {listing.map((e, index) => {
             return (
               <Admin_Card
                 key={index}

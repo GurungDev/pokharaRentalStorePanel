@@ -64,7 +64,7 @@ function Subscriber() {
   ];
 
   return (
-    <div className="pt-10">
+    <div className="">
       <div className="layout">
       <div className="m-0 m-auto border-b-2 flex justify-between items-center">
           <div>
@@ -81,7 +81,7 @@ function Subscriber() {
         <div className="m-initial">
           {" "}
           <Box
-            className="h-[70vh] lg:h-[80vh]"
+            className="h-[50vh] lg:h-[60vh]"
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",

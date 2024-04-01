@@ -174,7 +174,7 @@ export function BoatUpdateComponent(props) {
   }
   return (
     <div>
-      <div className="h-[90vh] px-1 overflow-scroll  scroll-hidden pb-10 ">
+      <div className="h-[80vh] px-1 overflow-scroll  scroll-hidden pb-10 ">
         <Link
           href={"/store/boat"}
           className="flex gap-2 py-5 pb-7 items-center group"

@@ -41,35 +41,31 @@ const OtpForm = ({ registerForm }) => {
     <div>
       {" "}
       <Form {...registerFormAlognWithOtp}>
-        <form className="grid text-center items-center max-w-[400px] m-auto gap-5 bg-neutral-100 my-5 py-10 px-5 shadow-md">
-          <div className="text-center">
-            <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-              Pokhara Rental
-            </h1>
-            <small className="">Register a store</small>
+        <form className="login-register-form  grid gap-3 bg-neutral-100 my-5 py-10 px-20 shadow-md">
+          <div className="   ">
+            <FormField
+              control={registerFormAlognWithOtp.control}
+              name="otp"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder="OTP"
+                      className="text-center w-full "
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <div className=" ">
             <p className="text-sm text-gray-500   text-center">
               OTP has been sent to your email. Please verify !!
             </p>
           </div>
-          <FormField
-            control={registerFormAlognWithOtp.control}
-            name="otp"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    placeholder="OTP"
-                    className="text-center "
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="mt-4">
+          <div>
             <button
               type="submit"
               className="btn py-2 w-full bg-primary text-white rounded-md  "

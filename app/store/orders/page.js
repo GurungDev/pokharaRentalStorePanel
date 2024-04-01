@@ -156,9 +156,9 @@ function Orders() {
   ];
 
   return (
-    <div className="pt-10">
+    <div className="">
       <div className="layout">
-        <div className="m-0 m-auto border-b-2">
+        <div className="m-0 bg-white sticky top-[0vh] z-[10] m-auto border-b-2">
           <h1 className="text-[1.5rem] text-neutral-800">Order Details</h1>
           <h2 className="text-[.8rem] pb-6 text-neutral-600">
             List of all the Orders
@@ -167,7 +167,7 @@ function Orders() {
         <div className="m-initial">
           {" "}
           <Box
-            className="h-[70vh] lg:h-[80vh]"
+            className="h-[50vh] lg:h-[60vh]"
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",

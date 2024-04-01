@@ -21,7 +21,7 @@ const BoatUpdatepage = () => {
     }
   }, []);
   return (
-    <div className=" pt-10">
+    <div className="">
       <div className="layout">
         {boatData && (
           <BoatUpdateComponent

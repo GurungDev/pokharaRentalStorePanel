@@ -10,10 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { MapContainer } from "react-leaflet/MapContainer";
-import { TileLayer } from "react-leaflet/TileLayer";
 
 import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,12 +19,11 @@ import * as z from "zod";
 import { SendOtp } from "@/services/auth/sendOtp.service";
 
 import { OtpPurpose } from "@/lib/enum";
-import MapComponent from "./mapComponent";
 import { useState } from "react";
 import OtpForm from "./otpForm";
 
 const RegisterForm = () => {
-  const [isOtpSent, setIsOtpSent] = useState(false) 
+  const [isOtpSent, setIsOtpSent] = useState(false);
   const formSchema = z.object({
     email: z.string().email({
       message: "Invalid email format.",
@@ -53,8 +49,7 @@ const RegisterForm = () => {
     }),
   });
   const { toast } = useToast();
- 
- 
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,7 +60,7 @@ const RegisterForm = () => {
       phoneNumber: "",
       password: "",
       long: "50.23",
-      lat: "40.23"
+      lat: "40.23",
     },
   });
 
@@ -80,10 +75,9 @@ const RegisterForm = () => {
       if (!res) {
         throw new Error(400, res?.data?.message);
       }
-      setIsOtpSent(true)
+      setIsOtpSent(true);
       toast({
         title: "Otp sent",
-
       });
     } catch (error) {
       toast({
@@ -94,20 +88,16 @@ const RegisterForm = () => {
     }
   }
 
-  return (
-    isOtpSent ? <OtpForm  registerForm={form}/> : <Form {...form}>
+  return isOtpSent ? (
+    <OtpForm registerForm={form} />
+  ) : (
+    <Form {...form}>
       <form
-        className="grid gap-7 bg-neutral-100 my-5 py-10 px-20 shadow-md"
+        className="login-register-form grid gap-7 bg-neutral-100 my-5 py-10 px-20 shadow-md"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="text-center">
-          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-            Pokhara Rental
-          </h1>
-          <small className="">Register a store</small>
-        </div>
-        <div className="flex justify-between gap-10">
-          <div className="grow grid gap-7">
+        <div className="md:flex justify-between gap-10">
+          <div className="grow grid  gap-7">
             <FormField
               control={form.control}
               name="name"
@@ -207,9 +197,10 @@ const RegisterForm = () => {
           Login
         </Button>
       </form>
-    </Form> 
-    
+    </Form>
   );
+
+  
 };
 
 export default RegisterForm;

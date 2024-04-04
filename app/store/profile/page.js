@@ -69,7 +69,7 @@ const ProfilePage = () => {
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Login failed",
+        title: "Updated failed",
         description: error.response?.data?.message || "Something went wrong",
       });
     }

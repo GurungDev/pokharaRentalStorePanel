@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic'
+import React from 'react';
 
-function MapComponent() {
+function MapComponent( ) {
   const Map = dynamic(
     () => import('./map.js'),  
     { 
@@ -8,7 +9,7 @@ function MapComponent() {
       ssr: false 
     }
   )
-  return <Map className="h-[40vh] w-full"/>
+  return <Map   className="h-[40vh] w-full"/>
 }
 
-export default MapComponent
+export default React.memo(MapComponent);

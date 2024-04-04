@@ -5,9 +5,11 @@ import { toast } from "@/components/ui/use-toast";
 import { RegisterStore } from "@/services/auth/register.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormControl } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { MapContext } from "./registerContext";
+import Timer from "../timer";
 export const registerFormAlongWithOtpSchema = z.object({
   otp: z.string().min(3, {
     message: " must be at least 3 characters.",
@@ -20,9 +22,16 @@ const OtpForm = ({ registerForm }) => {
       otp: "",
     },
   });
+  const context = useContext(MapContext);
+
   async function onRegisterFormAlongWithOtpSubmit(values) {
     try {
-      let data = { otp: values.otp, ...registerForm.getValues() };
+      let data = {
+        otp: values.otp,
+        ...registerForm.getValues(),
+        long: context.long,
+        lat: context.ltd,
+      };
       const res = await RegisterStore(data);
       toast({
         title: "Register Success",
@@ -65,6 +74,11 @@ const OtpForm = ({ registerForm }) => {
               OTP has been sent to your email. Please verify !!
             </p>
           </div>
+          <Timer
+            onSendOTPFormSubmit={
+              context.form.handleSubmit(context.onSubmit)
+            }
+          />
           <div>
             <button
               type="submit"

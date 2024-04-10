@@ -59,17 +59,7 @@ function Boats() {
               />
             );
           })}
-           {listing.map((e, index) => {
-            return (
-              <Admin_Card
-                key={index}
-                details={e.description}
-                image={e.thumbnail}
-                name={e.title}
-                id={e.id}
-              />
-            );
-          })}
+          
         </div>
  
       </div>

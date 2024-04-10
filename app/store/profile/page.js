@@ -40,6 +40,11 @@ const ProfilePage = () => {
 
   const form = useForm({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      phoneNumber: "",
+      ownerName: ""
+    }
   });
   useEffect(() => {
     if (typeof window !== "undefined") {

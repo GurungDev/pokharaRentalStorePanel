@@ -19,9 +19,15 @@ function Orders() {
         const bookingDate = e?.bookingDate;
         const dateObj = new Date(bookingDate);
         const formattedDate = dateObj.toISOString().split("T")[0];
-       
 
-        return { ...e, id: e.id, title: e?.boat?.title || e?.cycle?.title, bookingDate: formattedDate };
+        return {
+          ...e,
+          id: e.id,
+          title: e?.boat?.title || e?.cycle?.title,
+          bookingDate: formattedDate,
+          customer_name: e?.customer?.name,
+          email: e?.customer?.email,
+        };
       });
       setRows(updatedRow);
     } catch (error) {
@@ -38,13 +44,34 @@ function Orders() {
   }, [rowChanged]);
 
   const columns = [
-    { field: "id", headerName: "ID", flex: 0.5, maxWidth: 90 },
+    {
+      field: "customer_name",
+      headerName: "Customer Name",
+      flex: 1,
+      minWidth: 150,
+      maxWidth: 200,
+    },
+    {
+      field: "transaction_uuid",
+      headerName: "Order ID",
+      flex: 1,
+      minWidth: 320,
+      maxWidth: 320,
+    },
+
+    {
+      field: "email",
+      headerName: "Email",
+      flex: 1,
+      minWidth: 200,
+      maxWidth: 250,
+    },
     {
       field: "quantity",
       headerName: "Quantity",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 250,
+      flex: 0.5,
+      minWidth: 90,
+      maxWidth: 90,
     },
     {
       field: "totalPriceInRs",
@@ -53,6 +80,14 @@ function Orders() {
       minWidth: 150,
       maxWidth: 250,
     },
+    {
+      field: "paymentType",
+      headerName: "Payment Type",
+      flex: 1,
+      minWidth: 150,
+      maxWidth: 250,
+    },
+
     {
       field: "title",
       headerName: "Listing Name",
@@ -64,9 +99,9 @@ function Orders() {
     {
       field: "priceOfSingleProduct",
       headerName: "Unit Price",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 250,
+      flex: 0.5,
+      minWidth: 90,
+      maxWidth: 90,
     },
 
     {
@@ -79,13 +114,13 @@ function Orders() {
 
     {
       field: "durationInHour",
-      headerName: "Duration",
+      headerName: "Duration In Hour",
       type: "number",
-      flex: 1,
+      flex: 0.5,
       headerAlign: "left",
       align: "left",
-      minWidth: 150,
-      maxWidth: 200,
+      minWidth: 90,
+      maxWidth: 90,
     },
     // {
     //   field: "is_approved",

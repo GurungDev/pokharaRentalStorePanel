@@ -63,8 +63,7 @@ function Dashoard() {
 
         const today = new Date();
         today.setUTCHours(0, 0, 0, 0);
-        const tomorrow = new Date(today);
-        tomorrow.setUTCDate(today.getUTCDate() + 1);
+   
 
         const currentMonthSales = salesDataRes?.data.filter((data) => {
           const dataMonth = new Date(data.date).getMonth() + 1; // Adding 1 to match the format of currentMonth
@@ -72,12 +71,14 @@ function Dashoard() {
         });
 
         const todayOrderCount = salesDataRes?.data.filter((data) => {
-          const dataMonth = new Date(data.date).getDay() + 1;
+          const dataMonth = new Date(data.date);
+      
           return dataMonth >= today;
         });
         const todayTotalSales = todayOrderCount.reduce((acc, data) => {
           return acc + (parseInt(data?.sales, 10) || 0); // Add sales of each item to the accumulator
         }, 0);
+       
         setsalesToday(todayTotalSales);
         setordeCountToday(todayOrderCount?.length);
 

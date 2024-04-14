@@ -34,7 +34,6 @@ function Dashoard() {
   const [orderData, setorderData] = useState([]);
   const [ordeCountToday, setordeCountToday] = useState();
   const [salesToday, setsalesToday] = useState();
-
   const [totalSales, setTotalSales] = useState(0);
   const [orderCount, setorderCount] = useState(0);
   const currentMonth = new Date().getMonth() + 1;

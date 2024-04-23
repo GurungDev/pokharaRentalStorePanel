@@ -39,9 +39,9 @@ const formSchema = z.object({
       message: " must be at least 5 characters.",
     })
   ),
-  priceInRs: z.number({ message: "Invalid number format" }),
+  priceInRs: z.coerce.number({ message: "Invalid number format" }),
 
-  capacity: z.number({ message: "Invalid number format" }),
+  capacity: z.coerce.number({ message: "Invalid number format" }),
 });
 
 const IssueFormSchema = z.object({
@@ -104,8 +104,8 @@ export function BoatUpdateComponent(props) {
     defaultValues: {
       title: props?.title,
       description: props?.description,
-      priceInRs: props?.priceInRs,
-      capacity: props?.capacity,
+      priceInRs: Number(props?.priceInRs),
+      capacity: Number(props?.capacity),
     },
   });
 
@@ -219,7 +219,7 @@ export function BoatUpdateComponent(props) {
                   <FormItem>
                     <FormLabel>Price of the boat for an hour</FormLabel>
                     <FormControl>
-                      <Input value={props?.priceInRs.toString()} {...field} />
+                      <Input   value={props?.priceInRs} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -233,7 +233,7 @@ export function BoatUpdateComponent(props) {
                   <FormItem>
                     <FormLabel>Capacity of the boat</FormLabel>
                     <FormControl>
-                      <Input value={String(props?.capacity)} {...field} />
+                      <Input  value={(props?.capacity)} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

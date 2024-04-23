@@ -40,7 +40,7 @@ const formSchema = z.object({
       message: " must be at least 5 characters.",
     })
   ),
-  priceInRs: z.number({ message: "Invalid number format" }),
+  priceInRs: z.coerce.number({ message: "Invalid number format" }),
 });
 
 const IssueFormSchema = z.object({
